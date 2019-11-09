@@ -12,23 +12,16 @@ public class MyApplication extends Application {
 
     private static MyApplication instance;
 
-    private MyApplication(){}
-
     //单例
     public static MyApplication getInstance(){
-        if (instance == null){
-            synchronized (MyApplication.class){
-                if (instance == null){
-                    instance = new MyApplication();
-                }
-            }
-        }
         return instance;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
+        //赋值实例
+        instance = this;
         LitePal.initialize(this);
     }
 }
