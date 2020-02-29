@@ -1,13 +1,18 @@
 package com.fallgod.weather.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -36,11 +41,13 @@ public class WeatherActivity extends AppCompatActivity {
 
     private static final String BING_IMG = "http://guolin.tech/api/bing_pic";
 
+    public SwipeRefreshLayout swipeRefreshLayout;
+    public DrawerLayout drawerLayout;
+
     private Weather weatherInfo;
-
     private ImageView weatherBg;
-
     private ScrollView weatherLayout;
+    private Button navButton;
     private TextView titleCity;
     private TextView titleUpdateTime;
     private TextView degreeText;
@@ -66,6 +73,9 @@ public class WeatherActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_weather);
         // 初始化各控件
+        swipeRefreshLayout = findViewById(R.id.swipe_refresh);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navButton = findViewById(R.id.nav_button);
         weatherBg = findViewById(R.id.weather_bg);
         weatherLayout = findViewById(R.id.weather_layout);
         titleCity = findViewById(R.id.title_city);
@@ -86,6 +96,13 @@ public class WeatherActivity extends AppCompatActivity {
         SPUtil.putString(this,SPUtil.SP_WEATHER_ID,weatherId);
         LogUtil.d(TAG,"weatherId："+weatherId);
         requestWeather(weatherId);
+
+        swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        //添加下拉刷新事件
+        swipeRefreshLayout.setOnRefreshListener(()->requestWeather(weatherId));
+
+        //添加导航栏按钮点击事件
+        navButton.setOnClickListener((View v)->drawerLayout.openDrawer(GravityCompat.START));
 
         //更新背景图片,优先从sp取
         String url = SPUtil.getString(WeatherActivity.this,SPUtil.SP_BING_IMG,"");
@@ -125,6 +142,7 @@ public class WeatherActivity extends AppCompatActivity {
             public void onError(Throwable throwable) {
                 Toast.makeText(WeatherActivity.this,"获取天气信息失败",Toast.LENGTH_SHORT).show();
                 LogUtil.e(TAG, "onError: getWeather" + throwable);
+                swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
@@ -143,6 +161,7 @@ public class WeatherActivity extends AppCompatActivity {
                 }
                 //确保每次都是最新的图片
                 loadBingImage();
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
