@@ -1,10 +1,12 @@
 package com.fallgod.weather.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -17,11 +19,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.fallgod.weather.MyApplication;
 import com.fallgod.weather.R;
 import com.fallgod.weather.db.City;
 import com.fallgod.weather.db.County;
 import com.fallgod.weather.db.Province;
 import com.fallgod.weather.util.HttpUtil;
+import com.fallgod.weather.util.LogUtil;
 import com.fallgod.weather.util.Utility;
 
 import org.litepal.crud.DataSupport;
@@ -30,6 +34,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import interfaces.heweather.com.interfacesmodule.bean.search.Search;
+import interfaces.heweather.com.interfacesmodule.view.HeWeather;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -105,6 +111,14 @@ public class ChooseAreaFragment extends Fragment {
             }else if (currentLevel == LEVEL_CITY){
                 selectedCity = cityList.get(position);
                 queryCounties();
+            }else if (currentLevel == LEVEL_COUNTY){
+                String weatherId = countyList.get(position).getWeatherId();
+                Intent intent = new Intent(getActivity(),WeatherActivity.class);
+                intent.putExtra("weather_id",weatherId);
+                startActivity(intent);
+                if (getActivity() != null){
+                    getActivity().finish();
+                }
             }
         });
         backButton.setOnClickListener((View v)->{
@@ -183,7 +197,7 @@ public class ChooseAreaFragment extends Fragment {
      * @param type 类型
      */
     private void queryFromServer(String address,String type){
-        Log.d(TAG,"address:" + address + "   type:" + type);
+        LogUtil.d(TAG,"address:" + address + "   type:" + type);
         showProgressBar();
         HttpUtil.sendOkHttpResquest(address, new Callback() {
             @Override

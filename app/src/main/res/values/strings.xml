@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">MyApplication</string>
+    <string name="str_air_quality">空气质量</string>
+    <string name="str_air_quality_aqi">AQI指数</string>
+    <string name="str_air_quality_pm25">PM2.5指数</string>
+    <string name="str_life_advice">生活建议</string>
+    <string name="str_weather_forecast">预报</string>
 </resources>
