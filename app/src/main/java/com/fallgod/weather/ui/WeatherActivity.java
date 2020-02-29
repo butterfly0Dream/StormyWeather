@@ -39,7 +39,7 @@ import interfaces.heweather.com.interfacesmodule.view.HeWeather;
 public class WeatherActivity extends AppCompatActivity {
     private static final String TAG = "WeatherActivity";
 
-    private static final String BING_IMG = "http://guolin.tech/api/bing_pic";
+    public static final String BING_IMG = "http://guolin.tech/api/bing_pic";
 
     public SwipeRefreshLayout swipeRefreshLayout;
     public DrawerLayout drawerLayout;

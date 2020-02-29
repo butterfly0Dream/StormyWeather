@@ -2,11 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.fallgod.weather">
 
-    <!--访问网络-->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!--访问网络定位-->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <!--访问GPS定位-->
+    <!-- 访问网络 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 访问网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 访问GPS定位 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
@@ -19,7 +17,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.WeatherActivity"></activity>
+        <service
+            android:name=".service.AutoUpdateService"
+            android:enabled="true"
+            android:exported="true"></service>
+
+        <activity android:name=".ui.WeatherActivity" />
 
         <meta-data
             android:name="com.google.android.actions"
